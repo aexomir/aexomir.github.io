@@ -4,7 +4,7 @@ Source for [aexomir.me](https://aexomir.me).
 
 ## Editing content
 
-All the copy (profile, projects, experience, certificates and links) lives in [`content.json`](content.json). Change it and push to `main`. GitHub Actions validates it, builds the page and deploys it in about a minute. If the content is invalid, the build fails and the live site keeps its last good version.
+All the copy (profile, projects, experience, certificates and links) lives in [`content.json`](content.json). Edit it in [Pages CMS](https://app.pagescms.org) (forms defined in [`.pages.yml`](.pages.yml)), or change the file and push to `main`. GitHub Actions validates it, builds the page and deploys it in about a minute. If the content is invalid, the build fails and the live site keeps its last good version.
 
 The same file is published at `https://aexomir.me/content.json` for the iPhone app ([aexomir/portfolio-app](https://github.com/aexomir/portfolio-app)).
 

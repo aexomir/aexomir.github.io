@@ -1,0 +1,105 @@
+# Pages CMS (app.pagescms.org) editor for content.json.
+# Each save is a commit to main, which rebuilds aexomir.me and updates the iPhone app.
+# Keep these fields in step with the checks in scripts/build.mjs.
+content:
+  - name: site
+    label: Site content
+    type: file
+    path: content.json
+    format: json
+    fields:
+      - name: profile
+        label: Profile
+        type: object
+        fields:
+          - { name: name, label: Name, type: string, required: true }
+          - { name: title, label: Title, type: string, required: true, description: "Small line above the name, also used in the page title." }
+          - { name: description, label: Search and share description, type: text, required: true, description: "Shown by Google and in link previews." }
+          - { name: intro, label: Intro, type: text, required: true, description: "The paragraph under the name. \"See my projects.\" is added after it." }
+          - { name: currently, label: Currently, type: string, required: true }
+          - { name: city, label: City, type: string, required: true, description: "Label for the live clock." }
+          - { name: timeZone, label: Time zone, type: string, required: true, description: "IANA name, for example Europe/Rome." }
+          - { name: status, label: Status, type: string, required: true, description: "Next to the green dot, for example \"Open to new roles\"." }
+
+      - name: projects
+        label: Projects
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{name} · {type} · {year}"
+        fields:
+          - name: slug
+            label: Slug
+            type: string
+            required: true
+            pattern: { regex: "^[a-z0-9-]+$", message: "Lowercase letters, numbers and dashes only." }
+            description: "Used in the app's project link. Must be unique; avoid changing it once published."
+          - { name: name, label: Name, type: string, required: true }
+          - name: type
+            label: Type
+            type: select
+            required: true
+            options:
+              values: [Apps, Research, Open Source]
+          - { name: year, label: Year, type: string, required: true, description: "Shown as written, for example 2026 or 2024 — 2025." }
+          - { name: summary, label: Summary, type: text, required: true, description: "One or two sentences, shown in the list." }
+          - name: repo
+            label: GitHub link
+            type: string
+            pattern: { regex: "^(https://\\S+)?$", message: "Leave empty or use a full https:// link." }
+          - name: facts
+            label: Facts (app detail screen)
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{label}: {value}"
+            fields:
+              - { name: label, label: Label, type: string, required: true }
+              - { name: value, label: Value, type: string, required: true }
+
+      - name: experience
+        label: Experience
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{years} · {role} · {company}"
+        fields:
+          - { name: years, label: Years, type: string, required: true, description: "For example 2022 — 2025 or 2025 — Now." }
+          - { name: role, label: Role, type: string, required: true }
+          - { name: company, label: Company, type: string, required: true }
+
+      - name: certificates
+        label: Certificates
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{name} · {year}"
+        fields:
+          - { name: name, label: Name, type: string, required: true }
+          - { name: issuer, label: Issuer, type: string, required: true }
+          - { name: year, label: Year, type: string, required: true, description: "For example 2025 or In progress." }
+          - name: url
+            label: Link
+            type: string
+            pattern: { regex: "^(https://\\S+)?$", message: "Leave empty or use a full https:// link." }
+            description: "GitHub links show as \"Repo\", others as \"Verify\"."
+
+      - name: links
+        label: Contact links
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{label} · {value}"
+        fields:
+          - { name: label, label: Label, type: string, required: true, description: "For example Email, GitHub, LinkedIn." }
+          - { name: value, label: Shown as, type: string, required: true }
+          - name: href
+            label: Link
+            type: string
+            required: true
+            pattern: { regex: "^(https://|mailto:)\\S+$", message: "Use https://… or mailto:…" }

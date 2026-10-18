@@ -38,3 +38,14 @@ test('bad content is rejected with readable errors', () => {
   assert.ok(errors.some((e) => e.includes('"intro" is required')));
   assert.throws(() => render(c, template), /content.json is invalid/);
 });
+
+test('optional fields can be missing or null, as Pages CMS may save them', () => {
+  const c = structuredClone(content);
+  delete c.projects[0].repo;
+  c.projects[1].repo = null;
+  delete c.projects[2].facts;
+  delete c.certificates[1].url;
+  assert.deepEqual(validate(c), []);
+  const html = render(c, template, 2026);
+  assert.ok(html.includes(`<span class="name">${c.projects[0].name}</span>`));
+});
