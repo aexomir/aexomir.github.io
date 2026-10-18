@@ -1,0 +1,131 @@
+{
+  "profile": {
+    "name": "Amir Ranjbar",
+    "title": "Software Engineer · React Native & ML",
+    "description": "Amir Ranjbar builds fast, reliable React Native apps, shipped to 100M+ users, and studies AI at Politecnico di Torino. Projects, experience and contact.",
+    "intro": "I build fast, reliable mobile apps with React Native, shipped to a combined 100M+ users at Digikala and MyMCI. Now I'm doing an MSc in AI at Politecnico di Torino, working on LLM systems and on-device ML.",
+    "currently": "MSc AI · Politecnico di Torino",
+    "city": "Turin",
+    "timeZone": "Europe/Rome",
+    "status": "Open to new roles"
+  },
+  "projects": [
+    {
+      "slug": "chrona",
+      "name": "Chrona",
+      "type": "Apps",
+      "year": "2026",
+      "summary": "Automatic time tracking for Mac and iPhone, with on-device model inference and cross-device activity sync. In TestFlight.",
+      "repo": "https://github.com/aexomir/Chrona",
+      "facts": [
+        { "label": "Platforms", "value": "macOS · iOS" },
+        { "label": "Inference", "value": "On-device" },
+        { "label": "Sync", "value": "Cross-device activity" },
+        { "label": "Status", "value": "TestFlight" }
+      ]
+    },
+    {
+      "slug": "semantic-correspondence",
+      "name": "Semantic Correspondence with ViTs",
+      "type": "Research",
+      "year": "2026",
+      "summary": "Frozen vs fine-tuned DINOv2, DINOv3 and SAM backbones on SPair-71k. 76.4% PCK@0.1 with DINOv3, up from 53.6% frozen.",
+      "repo": "https://github.com/aexomir/semantic-correspondence",
+      "facts": [
+        { "label": "Backbones", "value": "DINOv2 · DINOv3 · SAM" },
+        { "label": "Dataset", "value": "SPair-71k" },
+        { "label": "Result", "value": "76.4% PCK@0.1, fine-tuned DINOv3" },
+        { "label": "Baseline", "value": "53.6% frozen" }
+      ]
+    },
+    {
+      "slug": "heart-disease",
+      "name": "Heart Disease Risk Prediction",
+      "type": "Research",
+      "year": "2026",
+      "summary": "Logistic Regression, XGBoost and MLP with cross-site external validation, calibration and SHAP. ROC-AUC 0.949 on Cleveland.",
+      "repo": "https://github.com/aexomir/heart-disease-prediction",
+      "facts": [
+        { "label": "Models", "value": "Logistic Regression · XGBoost · MLP" },
+        { "label": "Validation", "value": "Cross-site, external" },
+        { "label": "Analysis", "value": "Calibration · SHAP" },
+        { "label": "Result", "value": "ROC-AUC 0.949 on Cleveland" }
+      ]
+    },
+    {
+      "slug": "llm-test-generation",
+      "name": "Multi-Agent LLM Test Generation",
+      "type": "Research",
+      "year": "2026",
+      "summary": "Single, collaborative and competitive LLM agents for unit-test generation on HumanEval, with an ACL-format paper.",
+      "repo": "https://github.com/aexomir/LLM-Agents-for-Collaborative-Test-Case-Generations",
+      "facts": [
+        { "label": "Setups", "value": "Single · Collaborative · Competitive" },
+        { "label": "Benchmark", "value": "HumanEval" },
+        { "label": "Output", "value": "ACL-format paper" }
+      ]
+    },
+    {
+      "slug": "drone-reliability",
+      "name": "Drone Navigation Reliability",
+      "type": "Research",
+      "year": "2025",
+      "summary": "Hardware-in-the-loop fault injection for a deep RL drone policy on Jetson Nano, via ONNX and TensorRT. With Prof. Sonza Reorda, PoliTo.",
+      "repo": "https://github.com/aexomir/drone-navigation-reliability",
+      "facts": [
+        { "label": "Method", "value": "Hardware-in-the-loop fault injection" },
+        { "label": "Policy", "value": "Deep RL" },
+        { "label": "Hardware", "value": "Jetson Nano" },
+        { "label": "Runtime", "value": "ONNX · TensorRT" },
+        { "label": "With", "value": "Prof. Sonza Reorda, PoliTo" }
+      ]
+    },
+    {
+      "slug": "gold-routing",
+      "name": "Gold Collection Routing",
+      "type": "Research",
+      "year": "2025",
+      "summary": "Genetic, ant colony and simulated annealing vs a custom 2-opt heuristic on a Traveling Thief variant. The heuristic won by 88% on average.",
+      "repo": "https://github.com/aexomir/Gold-Collection-Routing-Optimization",
+      "facts": [
+        { "label": "Problem", "value": "Traveling Thief variant" },
+        { "label": "Compared", "value": "Genetic · Ant colony · Simulated annealing" },
+        { "label": "Winner", "value": "Custom 2-opt heuristic, 88% better on average" }
+      ]
+    },
+    {
+      "slug": "iot-security",
+      "name": "IoT Security (BSc thesis)",
+      "type": "Research",
+      "year": "2022",
+      "summary": "Common MQTT attacks in IoT deployments, and tooling to protect embedded devices against them.",
+      "repo": "",
+      "facts": [
+        { "label": "Protocol", "value": "MQTT" },
+        { "label": "Focus", "value": "Attacks on IoT deployments" },
+        { "label": "Output", "value": "Tooling for embedded devices" }
+      ]
+    }
+  ],
+  "experience": [
+    { "years": "2025 — Now", "role": "Machine Learning Engineer (Part-Time)", "company": "BitPolito" },
+    { "years": "2023 — 2024", "role": "Mobile Team Lead (Contract)", "company": "MyMCI" },
+    { "years": "2022 — 2025", "role": "Senior Software Engineer", "company": "Digikala" },
+    { "years": "2022", "role": "IoT Engineer (Internship)", "company": "Ganje" },
+    { "years": "2021 — 2022", "role": "Mobile Application Developer", "company": "Agileful" },
+    { "years": "2019 — 2021", "role": "React Native Developer", "company": "EasyMotionSkin" }
+  ],
+  "certificates": [
+    { "name": "MLOps Specialization", "issuer": "Duke University · Coursera", "year": "In progress", "url": "" },
+    { "name": "MCP: Build Rich Context AI Apps with Anthropic", "issuer": "DeepLearning.AI", "year": "2026", "url": "https://github.com/aexomir/mcp-engineering" },
+    { "name": "LLM Engineering: Master AI, LLMs & Agents", "issuer": "Udemy", "year": "2025", "url": "" },
+    { "name": "LangChain: Develop LLM Powered Applications", "issuer": "Udemy", "year": "2025", "url": "" },
+    { "name": "OWASP Web Application Security", "issuer": "Voorivex Academy", "year": "2022", "url": "" },
+    { "name": "Neural Networks and Deep Learning", "issuer": "DeepLearning.AI", "year": "2022", "url": "" }
+  ],
+  "links": [
+    { "label": "Email", "value": "aexomir@gmail.com", "href": "mailto:aexomir@gmail.com" },
+    { "label": "GitHub", "value": "github.com/aexomir", "href": "https://github.com/aexomir" },
+    { "label": "LinkedIn", "value": "linkedin.com/in/aexomir", "href": "https://www.linkedin.com/in/aexomir/" }
+  ]
+}

@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Amir Ranjbar · Software Engineer, React Native &amp; ML</title>
-<meta name="description" content="Amir Ranjbar builds fast, reliable React Native apps, shipped to 100M+ users, and studies AI at Politecnico di Torino. Projects, experience and contact.">
+<title>{{profile.name}} · {{profile.title}}</title>
+<meta name="description" content="{{profile.description}}">
 <link rel="canonical" href="https://aexomir.me/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://aexomir.me/">
-<meta property="og:title" content="Amir Ranjbar · Software Engineer, React Native &amp; ML">
-<meta property="og:description" content="React Native apps shipped to 100M+ users. MSc in AI at Politecnico di Torino.">
+<meta property="og:title" content="{{profile.name}} · {{profile.title}}">
+<meta property="og:description" content="{{profile.description}}">
 <meta property="og:image" content="https://aexomir.me/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -157,7 +157,7 @@ html[data-dir="back"]::view-transition-new(page){animation-name:in-l}
 <body>
 <header>
   <div class="wrap bar">
-    <a class="brand" href="#/">Amir Ranjbar</a>
+    <a class="brand" href="#/">{{profile.name}}</a>
     <nav>
       <a href="#/" data-route="home">Home</a>
       <a href="#/projects" data-route="projects">Projects</a>
@@ -172,47 +172,34 @@ html[data-dir="back"]::view-transition-new(page){animation-name:in-l}
 <main class="wrap">
   <section class="home" data-page="home">
     <div>
-      <p class="lbl kicker">Software Engineer · React Native &amp; ML</p>
-      <h1 class="hero" aria-label="Amir Ranjbar"></h1>
+      <p class="lbl kicker">{{profile.title}}</p>
+      <h1 class="hero" aria-label="{{profile.name}}"></h1>
     </div>
     <div class="intro">
       <div></div>
       <div>
-        <p>I build fast, reliable mobile apps with React Native, shipped to a combined 100M+ users at Digikala and MyMCI. Now I'm doing an MSc in AI at Politecnico di Torino, working on LLM systems and on-device ML. See my <a href="#/projects">projects</a>.</p>
+        <p>{{profile.intro}} See my <a href="#/projects">projects</a>.</p>
       </div>
     </div>
     <div class="stats">
-      <div><span class="lbl">Currently</span><span>MSc AI · Politecnico di Torino</span></div>
-      <div><span class="lbl">Turin</span><span class="clock">--:--:--</span></div>
-      <div><span class="lbl">Status</span><a class="status" href="#/contact"><i></i>Open to new roles</a></div>
+      <div><span class="lbl">Currently</span><span>{{profile.currently}}</span></div>
+      <div><span class="lbl">{{profile.city}}</span><span class="clock" data-tz="{{profile.timeZone}}">--:--:--</span></div>
+      <div><span class="lbl">Status</span><a class="status" href="#/contact"><i></i>{{profile.status}}</a></div>
     </div>
   </section>
 
   <section class="sec" data-page="projects" hidden>
     <h1 class="ttl" style="margin-bottom:0">Projects</h1>
     <div class="filters" role="group" aria-label="Filter projects">
-      <button type="button" data-filter="All" aria-pressed="true">All<small>7</small></button>
-      <button type="button" data-filter="Apps" aria-pressed="false">Apps<small>1</small></button>
-      <button type="button" data-filter="Research" aria-pressed="false">Research<small>6</small></button>
+      <!-- @filters -->
     </div>
-    <div class="row proj" data-type="Apps"><span class="name">Chrona</span><span class="sub">Automatic time tracking for Mac and iPhone, with on-device model inference and cross-device activity sync. In TestFlight.</span><span class="yr">2026</span><span class="links"><a class="ul" href="https://github.com/aexomir/Chrona">GitHub ↗</a></span></div>
-    <div class="row proj" data-type="Research"><span class="name">Semantic Correspondence with ViTs</span><span class="sub">Frozen vs fine-tuned DINOv2, DINOv3 and SAM backbones on SPair-71k. 76.4% PCK@0.1 with DINOv3, up from 53.6% frozen.</span><span class="yr">2026</span><span class="links"><a class="ul" href="https://github.com/aexomir/semantic-correspondence">GitHub ↗</a></span></div>
-    <div class="row proj" data-type="Research"><span class="name">Heart Disease Risk Prediction</span><span class="sub">Logistic Regression, XGBoost and MLP with cross-site external validation, calibration and SHAP. ROC-AUC 0.949 on Cleveland.</span><span class="yr">2026</span><span class="links"><a class="ul" href="https://github.com/aexomir/heart-disease-prediction">GitHub ↗</a></span></div>
-    <div class="row proj" data-type="Research"><span class="name">Multi-Agent LLM Test Generation</span><span class="sub">Single, collaborative and competitive LLM agents for unit-test generation on HumanEval, with an ACL-format paper.</span><span class="yr">2026</span><span class="links"><a class="ul" href="https://github.com/aexomir/LLM-Agents-for-Collaborative-Test-Case-Generations">GitHub ↗</a></span></div>
-    <div class="row proj" data-type="Research"><span class="name">Drone Navigation Reliability</span><span class="sub">Hardware-in-the-loop fault injection for a deep RL drone policy on Jetson Nano, via ONNX and TensorRT. With Prof. Sonza Reorda, PoliTo.</span><span class="yr">2025</span><span class="links"><a class="ul" href="https://github.com/aexomir/drone-navigation-reliability">GitHub ↗</a></span></div>
-    <div class="row proj" data-type="Research"><span class="name">Gold Collection Routing</span><span class="sub">Genetic, ant colony and simulated annealing vs a custom 2-opt heuristic on a Traveling Thief variant. The heuristic won by 88% on average.</span><span class="yr">2025</span><span class="links"><a class="ul" href="https://github.com/aexomir/Gold-Collection-Routing-Optimization">GitHub ↗</a></span></div>
-    <div class="row proj" data-type="Research"><span class="name">IoT Security (BSc thesis)</span><span class="sub">Common MQTT attacks in IoT deployments, and tooling to protect embedded devices against them.</span><span class="yr">2022</span><span class="links"></span></div>
+    <!-- @projects -->
   </section>
 
   <section class="sec" data-page="experience" hidden>
     <h1 class="ttl">Experience</h1>
     <div class="list">
-      <div class="row exp"><span class="yr">2025 — Now</span><span class="name">Machine Learning Engineer (Part-Time)</span><span class="sub">BitPolito</span></div>
-      <div class="row exp"><span class="yr">2023 — 2024</span><span class="name">Mobile Team Lead (Contract)</span><span class="sub">MyMCI</span></div>
-      <div class="row exp"><span class="yr">2022 — 2025</span><span class="name">Senior Software Engineer</span><span class="sub">Digikala</span></div>
-      <div class="row exp"><span class="yr">2022</span><span class="name">IoT Engineer (Internship)</span><span class="sub">Ganje</span></div>
-      <div class="row exp"><span class="yr">2021 — 2022</span><span class="name">Mobile Application Developer</span><span class="sub">Agileful</span></div>
-      <div class="row exp"><span class="yr">2019 — 2021</span><span class="name">React Native Developer</span><span class="sub">EasyMotionSkin</span></div>
+      <!-- @experience -->
     </div>
     <a class="more" href="#/certificates">Certificates →</a>
   </section>
@@ -220,27 +207,20 @@ html[data-dir="back"]::view-transition-new(page){animation-name:in-l}
   <section class="sec" data-page="certificates" hidden>
     <h1 class="ttl">Certificates</h1>
     <div class="list">
-      <div class="row cert"><span class="name">MLOps Specialization</span><span class="sub">Duke University · Coursera</span><span class="yr">In progress</span><span></span></div>
-      <div class="row cert"><span class="name">MCP: Build Rich Context AI Apps with Anthropic</span><span class="sub">DeepLearning.AI</span><span class="yr">2026</span><a class="ul" href="https://github.com/aexomir/mcp-engineering">Repo ↗</a></div>
-      <div class="row cert"><span class="name">LLM Engineering: Master AI, LLMs &amp; Agents</span><span class="sub">Udemy</span><span class="yr">2025</span><span></span></div>
-      <div class="row cert"><span class="name">LangChain: Develop LLM Powered Applications</span><span class="sub">Udemy</span><span class="yr">2025</span><span></span></div>
-      <div class="row cert"><span class="name">OWASP Web Application Security</span><span class="sub">Voorivex Academy</span><span class="yr">2022</span><span></span></div>
-      <div class="row cert"><span class="name">Neural Networks and Deep Learning</span><span class="sub">DeepLearning.AI</span><span class="yr">2022</span><span></span></div>
+      <!-- @certificates -->
     </div>
   </section>
 
   <section class="sec contact" data-page="contact" hidden>
     <h1 class="ttl">Contact</h1>
     <div class="list ct">
-      <a href="mailto:aexomir@gmail.com"><span class="lbl">Email</span><span>aexomir@gmail.com</span><span>↗</span></a>
-      <a href="https://github.com/aexomir"><span class="lbl">GitHub</span><span>github.com/aexomir</span><span>↗</span></a>
-      <a href="https://www.linkedin.com/in/aexomir/"><span class="lbl">LinkedIn</span><span>linkedin.com/in/aexomir</span><span>↗</span></a>
+      <!-- @links -->
     </div>
   </section>
 </main>
 
 <footer class="wrap">
-  <span>© 2026 Amir Ranjbar</span><span>Hosted on GitHub Pages</span>
+  <span>© {{year}} {{profile.name}}</span><span>Hosted on GitHub Pages</span>
 </footer>
 
 <script>
@@ -252,7 +232,9 @@ html[data-dir="back"]::view-transition-new(page){animation-name:in-l}
 
   // Hero letters, staggered like the original design.
   var hero = document.querySelector('.hero');
-  'Amir Ranjbar'.split('').forEach(function (ch, i) {
+  var NAME = hero.getAttribute('aria-label');
+  var HOME_TITLE = document.title;
+  NAME.split('').forEach(function (ch, i) {
     var s = document.createElement('span');
     s.setAttribute('aria-hidden', 'true');
     s.textContent = ch === ' ' ? ' ' : ch;
@@ -271,8 +253,8 @@ html[data-dir="back"]::view-transition-new(page){animation-name:in-l}
     document.querySelectorAll('nav [data-route]').forEach(function (a) {
       if (a.dataset.route === route) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
-    document.title = route === 'home' ? 'Amir Ranjbar · Software Engineer, React Native & ML'
-      : route.charAt(0).toUpperCase() + route.slice(1) + ' · Amir Ranjbar';
+    document.title = route === 'home' ? HOME_TITLE
+      : route.charAt(0).toUpperCase() + route.slice(1) + ' · ' + NAME;
     window.scrollTo(0, 0);
     current = route;
   }
@@ -323,7 +305,7 @@ html[data-dir="back"]::view-transition-new(page){animation-name:in-l}
 
   // Turin clock.
   var clock = document.querySelector('.clock');
-  function tick() { clock.textContent = new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/Rome', hour12: false }); }
+  function tick() { clock.textContent = new Date().toLocaleTimeString('en-GB', { timeZone: clock.dataset.tz, hour12: false }); }
   tick();
   setInterval(tick, 1000);
 
