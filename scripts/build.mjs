@@ -37,6 +37,16 @@ export function validate(c) {
     need(l, ['label', 'value', 'href'], `links[${i}]`);
     if (l?.href && !isUrl(l.href)) errors.push(`links[${i}]: href must start with https:// or mailto:`);
   });
+  // App status (read by the iPhone app only). Optional; missing fields fall back to defaults in the app.
+  const app = c?.app;
+  if (app != null) {
+    const bool = (v, where) => { if (v != null && typeof v !== 'boolean') errors.push(`${where} must be true or false`); };
+    bool(app.maintenance?.enabled, 'app.maintenance.enabled');
+    if (app.maintenance?.enabled && !app.maintenance?.message?.trim()) errors.push('app.maintenance: "message" is required while maintenance is on');
+    if (app.latestVersion && !/^\d+\.\d+\.\d+$/.test(app.latestVersion)) errors.push(`app.latestVersion "${app.latestVersion}" must look like 1.2.0`);
+    optUrl(app.updateUrl, 'app');
+    for (const [k, v] of Object.entries(app.features ?? {})) bool(v, `app.features.${k}`);
+  }
   return errors;
 }
 

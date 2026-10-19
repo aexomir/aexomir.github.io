@@ -1,0 +1,35 @@
+# "Build for TestFlight" button in Pages CMS: builds aexomir/portfolio-app on EAS
+# and submits it to App Store Connect, where it appears in TestFlight after processing.
+name: Build for TestFlight
+
+on:
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: Pages CMS payload as JSON
+        required: false
+        type: string
+
+concurrency:
+  group: app-testflight
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          repository: aexomir/portfolio-app
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - uses: expo/expo-github-action@v9
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: npm ci
+      - run: npm run sync-content
+      # The build runs on EAS servers; --no-wait returns once it is queued.
+      - run: eas build --platform ios --profile production --auto-submit --non-interactive --no-wait

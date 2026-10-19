@@ -1,0 +1,45 @@
+# "Publish app update" button in Pages CMS: ships the latest app code from
+# aexomir/portfolio-app to installed apps with EAS Update (no App Store review).
+# Content changes don't need this; the app downloads content.json by itself.
+name: Publish app update
+
+on:
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: Pages CMS payload as JSON
+        required: false
+        type: string
+
+concurrency:
+  group: app-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read the message from Pages CMS
+        id: msg
+        env:
+          PAYLOAD: ${{ inputs.payload }}
+        run: |
+          msg=$(node -e 'try { console.log(JSON.parse(process.env.PAYLOAD || "{}").inputs?.message || "") } catch { console.log("") }')
+          echo "message=${msg:-Update from Pages CMS}" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v7
+        with:
+          repository: aexomir/portfolio-app
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - uses: expo/expo-github-action@v9
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: npm ci
+      - run: npm run sync-content
+      - name: Publish to the production channel
+        env:
+          MESSAGE: ${{ steps.msg.outputs.message }}
+        run: eas update --channel production --environment production --platform ios --message "$MESSAGE" --non-interactive

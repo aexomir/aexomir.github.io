@@ -6,6 +6,11 @@ name: Build and deploy
 on:
   push:
   workflow_dispatch:
+    inputs:
+      payload:
+        description: Pages CMS payload as JSON (sent by the Deploy site button)
+        required: false
+        type: string
 
 permissions:
   contents: read

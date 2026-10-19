@@ -1,6 +1,24 @@
 # Pages CMS (app.pagescms.org) editor for content.json.
 # Each save is a commit to main, which rebuilds aexomir.me and updates the iPhone app.
 # Keep these fields in step with the checks in scripts/build.mjs.
+
+# Buttons in the Pages CMS sidebar. Each runs a workflow in .github/workflows/.
+actions:
+  - name: deploy-site
+    label: Deploy site
+    workflow: pages.yml
+    ref: main
+  - name: publish-app-update
+    label: Publish app update
+    workflow: app-update.yml
+    ref: main
+    fields:
+      - { name: message, label: What changed, type: string, required: true }
+  - name: build-testflight
+    label: Build for TestFlight
+    workflow: app-testflight.yml
+    ref: main
+
 content:
   - name: site
     label: Site content
@@ -103,3 +121,33 @@ content:
             type: string
             required: true
             pattern: { regex: "^(https://|mailto:)\\S+$", message: "Use https://… or mailto:…" }
+
+      - name: app
+        label: App status
+        type: object
+        description: "Only the iPhone app reads these. Changes reach it on its next launch or pull to refresh."
+        fields:
+          - name: maintenance
+            label: Maintenance banner
+            type: object
+            fields:
+              - { name: enabled, label: Show banner, type: boolean, default: false }
+              - { name: message, label: Message, type: text, description: "Required while the banner is on." }
+          - name: latestVersion
+            label: Latest app version
+            type: string
+            pattern: { regex: "^(\\d+\\.\\d+\\.\\d+)?$", message: "Like 1.2.0" }
+            description: "People on an older version see the update notice. The version is set in app.json."
+          - { name: updateMessage, label: Update notice text, type: string }
+          - name: updateUrl
+            label: Update link
+            type: string
+            pattern: { regex: "^(https://\\S+)?$", message: "Leave empty or use a full https:// link." }
+            description: "App Store or TestFlight link. Leave empty to show the notice without a button."
+          - name: features
+            label: Feature switches
+            type: object
+            fields:
+              - { name: nameWave, label: Name wave animation, type: boolean, default: true }
+              - { name: contactSheet, label: "Status opens the Get in touch sheet", type: boolean, default: true }
+              - { name: liveClock, label: Live clock on Home, type: boolean, default: true }

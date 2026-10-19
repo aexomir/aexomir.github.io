@@ -49,3 +49,16 @@ test('optional fields can be missing or null, as Pages CMS may save them', () =>
   const html = render(c, template, 2026);
   assert.ok(html.includes(`<span class="name">${c.projects[0].name}</span>`));
 });
+
+test('app status is checked', () => {
+  const c = structuredClone(content);
+  c.app.maintenance = { enabled: true, message: '' };
+  c.app.latestVersion = 'v2';
+  c.app.features.nameWave = 'yes';
+  const errors = validate(c);
+  assert.ok(errors.some((e) => e.includes('"message" is required while maintenance is on')));
+  assert.ok(errors.some((e) => e.includes('must look like 1.2.0')));
+  assert.ok(errors.some((e) => e.includes('app.features.nameWave must be true or false')));
+  delete c.app;
+  assert.deepEqual(validate(c), []);
+});
