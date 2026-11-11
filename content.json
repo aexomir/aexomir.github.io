@@ -2,14 +2,59 @@
   "profile": {
     "name": "Amir Ranjbar",
     "title": "Software Engineer · React Native & ML",
-    "description": "Amir Ranjbar builds fast, reliable React Native apps, shipped to 100M+ users, and studies AI at Politecnico di Torino. Projects, experience and contact.",
-    "intro": "I build fast, reliable mobile apps with React Native, shipped to a combined 100M+ users at Digikala and MyMCI. Now I'm doing an MSc in AI at Politecnico di Torino, working on LLM systems and on-device ML.",
+    "description": "Amir Ranjbar builds fast, reliable React Native apps, most recently at Digikala (40M active users), and studies AI at Politecnico di Torino. Projects, experience and contact.",
+    "intro": "I build fast, reliable mobile apps with React Native, most recently at Digikala, Iran's largest e-commerce platform with 40M active users. Now I'm doing an MSc in AI at Politecnico di Torino, working on LLM systems and on-device ML.",
     "currently": "MSc AI · Politecnico di Torino",
     "city": "Turin",
     "timeZone": "Europe/Rome",
     "status": "Open to new roles"
   },
   "projects": [
+    {
+      "slug": "portfolio-app",
+      "name": "Portfolio for iPhone",
+      "type": "Apps",
+      "year": "2026",
+      "summary": "This portfolio as a native iOS 26 app in Expo and React Native. It uses this site's content.json as its backend, works offline, and can be steered remotely without a new release.",
+      "repo": "https://github.com/aexomir/portfolio-app",
+      "facts": [
+        {
+          "label": "Platform",
+          "value": "iPhone · iOS 26 Liquid Glass"
+        },
+        {
+          "label": "Stack",
+          "value": "Expo SDK 58 · React Native 0.88 · TypeScript"
+        },
+        {
+          "label": "Backend",
+          "value": "Static content.json from aexomir.me"
+        },
+        {
+          "label": "Remote config",
+          "value": "Maintenance banner · Update notice · Feature switches"
+        },
+        {
+          "label": "Status",
+          "value": "Built from source; not on the App Store yet"
+        }
+      ],
+      "caseStudy": {
+        "role": "Solo project: design, iOS app and content pipeline",
+        "problem": "My portfolio already lived at aexomir.me as a quiet, typographic static site, and I wanted the same portfolio as a native iPhone app. Three constraints shaped it: it had to feel like iOS rather than a website in a frame, it had to still look like aexomir.me, and the content could never drift between the two.\n\nAdding a project should update the site and the app together, with no App Store release, and I should be able to steer the installed app (pause it, nudge people to update, turn features off) without shipping code.",
+        "approach": "Both surfaces read one file, content.json, edited through Pages CMS. Each save is a commit; GitHub Actions validates it, renders the site and publishes the same JSON at aexomir.me/content.json.\n\nThe app shows the copy bundled at build time, then its last good downloaded copy from disk, then a fresh download on launch and on pull to refresh, and it checks the shape of every download before using it. An \"app\" section in the same file drives a maintenance banner, a new-version notice and switches for three features.\n\nThe UI uses system components wherever iOS users have expectations: Expo Router native tabs, large-title stacks, UIKit context menus and a form sheet. Liquid Glass stays on the navigation layer, so content remains flat and readable.",
+        "decisions": "A static JSON file instead of a server. There's no database, hosting bill or API to secure, and every edit is a commit with history and undo. The cost is no per-user data and no push, so the app only sees changes on launch or refresh.\n\nLighter validation in the app than in the build. The site build rejects bad content outright; the app only refuses a file whose shape would crash a screen, and otherwise keeps its last good copy.\n\nRemote config that fails safe. If the \"app\" section is missing, every feature is on and no banner shows, and the update notice only fires for a well-formed version strictly newer than the installed one.\n\nOver-the-air updates tied to the app version, so an update can never reach a binary with different native code. Any native change means a new version and a new build.\n\nCustom interaction only where it carries identity: a weight wave through the name, and an Apps/Research switch that only claims horizontal pans, so scrolling and pull to refresh still work.",
+        "results": "The app runs the same content as aexomir.me from one CMS, and a content edit reaches it without a new build. It stays usable offline, with the last good copy or, on a first launch with no network, the bundled one, and pull to refresh reports whether anything changed. The maintenance banner, update notice and feature switches are all editable in Pages CMS.\n\nThe release path is wired too: buttons in the CMS run workflows that publish an over-the-air update or build for TestFlight through EAS. It runs on Expo SDK 58, React Native 0.88 and the React Compiler, iPhone only for now.",
+        "retrospective": "Get it onto TestFlight sooner. I built the release pipeline before having the Apple developer account to run it, so the one path a visitor actually needs, installing the app, is the one that's missing.\n\nPersist small preferences from day one. The theme choice still resets on every launch, a small thing people notice straight away."
+      },
+      "images": [
+        {
+          "src": "assets/projects/portfolio-app/home-dark.png",
+          "alt": "Home screen of the app in dark mode: the name Amir Ranjbar in large thin type, a short intro, and rows for Currently, Turin time and Status above a floating glass tab bar.",
+          "caption": "Home screen in dark mode, with the glass tab bar."
+        }
+      ]
+    },
     {
       "slug": "chrona",
       "name": "Chrona",
@@ -255,7 +300,8 @@
     {
       "years": "2023 — 2024",
       "role": "Mobile Team Lead (Contract)",
-      "company": "MyMCI"
+      "company": "MyMCI",
+      "impact": "Led the mobile team on the MyMCI app."
     },
     {
       "years": "2022 — 2025",
