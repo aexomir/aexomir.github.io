@@ -44,6 +44,7 @@ export function validate(c) {
     slugs.add(p?.slug);
     if (p?.type && !TYPES.includes(p.type)) errors.push(`${where}: type must be one of ${TYPES.join(', ')}`);
     optUrl(p?.repo, where);
+    optUrl(p?.paper, where);
     optList(p?.facts, `${where} facts`).forEach((f, j) => need(f, ['label', 'value'], `${where} facts[${j}]`));
     if (hasCaseStudy(p)) need(p.caseStudy, CASE.map(([k]) => k), `${where} caseStudy`);
     optText(p?.caseStudy, ['role', 'retrospective'], `${where} caseStudy`);
@@ -91,6 +92,7 @@ const NAV = [['/projects/', 'Projects'], ['/experience/', 'Experience'], ['/cont
 
 const nameTag = (p) => `view-transition-name:p-${p.slug}`;
 const repoLink = (p, label = 'GitHub ↗') => (p.repo ? `<a class="ul" href="${esc(p.repo)}">${label}</a>` : '');
+const paperLink = (p) => (p.paper ? `<a class="ul" href="${esc(p.paper)}">Paper ↗</a>` : '');
 // Every page ends by pointing to the next step of the journey: home → projects → case studies → experience → contact.
 const onward = (href, label, kicker = 'Next') => `<a class="onward" href="${href}"><span class="lbl">${kicker}</span><span>${esc(label)} <span class="arrow">→</span></span></a>`;
 
@@ -119,7 +121,7 @@ function projectsBody(c) {
   const rows = c.projects.map((p) => {
     const cs = hasCaseStudy(p);
     const href = `/projects/${esc(p.slug)}/`;
-    return `<div class="row proj" data-type="${esc(p.type)}">${cs ? `<span class="name" style="${nameTag(p)}"><a href="${href}">${esc(p.name)}</a></span>` : `<span class="name">${esc(p.name)}</span>`}<span class="sub">${esc(p.summary)}</span><span class="yr">${esc(p.year)}</span><span class="links">${cs ? `<a class="ul" href="${href}">Case study →</a>` : ''}${repoLink(p)}</span></div>`;
+    return `<div class="row proj" data-type="${esc(p.type)}">${cs ? `<span class="name" style="${nameTag(p)}"><a href="${href}">${esc(p.name)}</a></span>` : `<span class="name">${esc(p.name)}</span>`}<span class="sub">${esc(p.summary)}</span><span class="yr">${esc(p.year)}</span><span class="links">${cs ? `<a class="ul" href="${href}">Case study →</a>` : ''}${paperLink(p)}${repoLink(p)}</span></div>`;
   }).join('\n  ');
   const first = c.projects.find(hasCaseStudy);
   return `<section class="page">
@@ -181,7 +183,7 @@ function caseStudyBody(p, next, sizeOf) {
     <p class="lbl">${esc(p.type)} · ${esc(p.year)}</p>
     <h1 class="ttl" style="${nameTag(p)}">${esc(p.name)}</h1>
     <p class="lead">${esc(p.summary)}</p>
-    ${p.repo ? `<p class="repo">${repoLink(p, 'View on GitHub ↗')}</p>` : ''}
+    ${p.repo || p.paper ? `<p class="repo">${[repoLink(p, 'View on GitHub ↗'), paperLink(p)].filter(Boolean).join(' · ')}</p>` : ''}
   </div>
   ${facts ? `<dl class="facts">${facts}</dl>` : ''}
   <div class="story">

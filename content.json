@@ -137,7 +137,7 @@
         }
       ],
       "caseStudy": {
-        "role": "Course project, MSc AI at Politecnico di Torino · team of three",
+        "role": "Course project, MSc AI at Politecnico di Torino · team of three. My part: the fine-tuning runs and the soft-argmax decoder (stages 2 and 3)",
         "problem": "Semantic correspondence means finding the same point on two different objects, like the left eye of one cat on another cat. We wanted to know how much of that pretrained vision backbones already encode, and how much a light fine-tune adds on top. We compared DINOv2 ViT-L/14, DINOv3 ViT-B/16 and the SAM ViT-B image encoder on SPair-71k: 12,234 test pairs and 88,328 keypoints.",
         "approach": "The matcher is deliberately simple. Extract a dense patch feature map from each image, L2-normalize it, read the descriptor at the source keypoint, and pick the most similar target patch by cosine similarity. Scoring is PCK: a prediction counts if it lands within 0.05, 0.1, 0.15 or 0.2 of the target's bounding-box size.\n\nThe pipeline runs in four stages: frozen baselines; fine-tuning the last 1, 2 or 4 transformer blocks with an InfoNCE correspondence loss; a window soft-argmax decoder tuned on validation; and zero-shot transfer to PF-Pascal and PF-Willow. It's one Colab notebook, with features cached as float16 and checkpoints on Google Drive so runs resume across sessions.",
         "decisions": "Change one thing at a time. The matcher stays fixed; only the backbone weights (stage 2) and the decoder (stage 3) change, so each gain can be attributed to one of them.\n\nTrain little. Only the last N blocks are unfrozen, trained with AdamW at a learning rate of 5e-6 for 3 epochs, batch size 1 with gradient accumulation of 4, and mixed precision. That's 9 runs: three backbones times three values of N.\n\nKeep the test split clean. Checkpoints are chosen by validation PCK@0.1, and the soft-argmax sweep (temperatures 0.001 to 0.05, windows 3 to 11) also runs on validation. The test split is only evaluated after training.\n\nGet below the patch grid. Argmax snaps to a 14- or 16-pixel patch. Window soft-argmax takes a temperature-weighted average in a small window around the peak, which gives sub-patch precision without touching the weights.",
@@ -178,7 +178,7 @@
         }
       ],
       "caseStudy": {
-        "role": "Course project, MSc AI at Politecnico di Torino · team of two",
+        "role": "Course project, MSc AI at Politecnico di Torino · team of two, with the work split evenly across every phase",
         "problem": "The UCI Heart Disease data comes from separate hospital cohorts. We trained on Cleveland and asked a harder question than held-out accuracy: how does the model hold up on patients from Hungary and Switzerland that it never saw in development, and how far can its probabilities be trusted? It's a research project, not a clinical tool.",
         "approach": "We turned the label into any disease versus none and split Cleveland 70/15/15 with stratification: 212 train, 45 validation and 46 test rows. Hungarian (294 rows) and Swiss (123 rows) were held out as external test sets.\n\nThree models share one preprocessing pipeline: logistic regression, XGBoost tuned with 50 Optuna trials, and a small MLP. A feature-engineering step expands the 13 raw predictors to 19 with interaction terms, then median imputation and scaling. Tuning and 5-fold cross-validation used Cleveland train only, the final models were fit on train plus validation, and the three test sets stayed untouched until final evaluation. Beyond ROC-AUC we reported average precision, F1, sensitivity and specificity, ran DeLong tests between the top two models on each split, tried Platt and isotonic calibration, ran a CORAL domain-adaptation ablation, and used SHAP to explain XGBoost.",
         "decisions": "Measure the shift before modelling. Chi-square tests for categorical features and Kolmogorov-Smirnov tests for continuous ones showed what we were up against. Hungarian is missing ca in 291 of 294 rows and thal in 266. Switzerland is 93.5% positive, with only 8 negatives in 123 rows.\n\nSelect on validation, not test. Cleveland validation ROC-AUC picked logistic regression as the best model. Threshold metrics use a fixed 0.5 cutoff rather than a clinically chosen operating point, and we list that as a limitation.\n\nDon't over-read small numbers. With a 46-row test set and 8 Swiss negatives, we ran DeLong tests before calling any model better, and we read Switzerland's high average precision against its 93.5% base rate.\n\nKeep adaptation honest. CORAL was evaluated only as an ablation and never used to select or train the models.",
@@ -213,7 +213,8 @@
           "label": "Output",
           "value": "ACL-format paper"
         }
-      ]
+      ],
+      "paper": "https://github.com/aexomir/LLM-Agents-for-Collaborative-Test-Case-Generations/blob/main/report/Multi-Agent%20LLM-Based%20Test%20Generation.pdf"
     },
     {
       "slug": "drone-reliability",
@@ -250,7 +251,7 @@
       "name": "Gold Collection Routing",
       "type": "Research",
       "year": "2025",
-      "summary": "Genetic, ant colony and simulated annealing vs a custom 2-opt heuristic on a Traveling Thief variant. The heuristic won by 88% on average.",
+      "summary": "A Traveling Thief variant where carried weight makes travel exponentially more expensive. A custom 2-opt heuristic cut route cost by 88% on average against a naive one-trip-per-city baseline, and was compared with genetic, ant colony and simulated annealing methods.",
       "repo": "https://github.com/aexomir/Gold-Collection-Routing-Optimization",
       "facts": [
         {
@@ -295,7 +296,7 @@
       "years": "2025 — Now",
       "role": "Machine Learning Engineer (Part-Time)",
       "company": "BitPolito",
-      "impact": "Built a RAG pipeline over internal documents, with embedding-based vector search feeding an LLM, to power an internal chatbot and cut response latency by about 30%."
+      "impact": "Built a RAG pipeline over internal documents, with embedding-based vector search feeding an LLM, to power an internal chatbot. Automated recurring ML workflows and marketing-asset generation for a bilingual, cross-functional team."
     },
     {
       "years": "2023 — 2024",
@@ -307,7 +308,7 @@
       "years": "2022 — 2025",
       "role": "Senior Software Engineer",
       "company": "Digikala",
-      "impact": "Iran's largest e-commerce platform, 40M active users. Built a reusable service architecture adopted by 3 product teams and 15+ engineers, and profiled and fixed recurring memory leaks and rendering issues, cutting CPU usage by 30%."
+      "impact": "Iran's largest e-commerce platform, 40M active users. Built a reusable service architecture adopted by 3 product teams and 15+ engineers, and profiled and fixed recurring memory leaks and rendering issues, cutting app-wide CPU usage by 30%."
     },
     {
       "years": "2022",
@@ -337,24 +338,6 @@
       "issuer": "DeepLearning.AI",
       "year": "2026",
       "url": "https://github.com/aexomir/mcp-engineering"
-    },
-    {
-      "name": "LLM Engineering: Master AI, LLMs & Agents",
-      "issuer": "Udemy",
-      "year": "2025",
-      "url": ""
-    },
-    {
-      "name": "LangChain: Develop LLM Powered Applications",
-      "issuer": "Udemy",
-      "year": "2025",
-      "url": ""
-    },
-    {
-      "name": "OWASP Web Application Security",
-      "issuer": "Voorivex Academy",
-      "year": "2022",
-      "url": ""
     },
     {
       "name": "Neural Networks and Deep Learning",

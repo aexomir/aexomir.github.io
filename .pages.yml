@@ -66,6 +66,11 @@ content:
             label: GitHub link
             type: string
             pattern: { regex: "^(https://\\S+)?$", message: "Leave empty or use a full https:// link." }
+          - name: paper
+            label: Paper link
+            type: string
+            pattern: { regex: "^(https://\\S+)?$", message: "Leave empty or use a full https:// link." }
+            description: "Optional, for research with a written paper."
           - name: facts
             label: Facts (app detail screen and case-study page)
             type: object

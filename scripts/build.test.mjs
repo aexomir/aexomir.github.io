@@ -83,6 +83,15 @@ test('case-study pages have every section, the role, and figures that reserve th
   }
 });
 
+test('a project with a paper links to it from the list', () => {
+  const { c, plain } = copy();
+  const p = plain[0] ?? c.projects[0];
+  p.paper = 'https://example.com/paper.pdf';
+  assert.ok(site(c)['/projects/'].includes('<a class="ul" href="https://example.com/paper.pdf">Paper ↗</a>'));
+  p.paper = 'http://example.com/paper.pdf';
+  assert.ok(validate(c).some((e) => e.includes('must start with https://')));
+});
+
 test('the current section is marked in the nav', () => {
   const pages = site();
   assert.ok(pages['/projects/'].includes('<a href="/projects/" aria-current="page">'));
