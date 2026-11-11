@@ -1,0 +1,183 @@
+/* aexomir.me — one stylesheet for every page. */
+
+@font-face{font-family:Geist;src:url(/fonts/Geist-Variable.woff2) format("woff2");font-weight:100 900;font-display:optional}
+@font-face{font-family:"Geist Mono";src:url(/fonts/GeistMono-Variable.woff2) format("woff2");font-weight:100 900;font-display:optional}
+
+[data-theme="light"]{--bg:#f6f5f2;--ink:#171716;--muted:#6c6b66;--line:rgba(23,23,22,.1);--line2:rgba(23,23,22,.22);--accent:oklch(0.52 0.11 155);--surface:#eeede8;color-scheme:light}
+[data-theme="dark"]{--bg:#131312;--ink:#ecebe6;--muted:#93928c;--line:rgba(236,235,230,.12);--line2:rgba(236,235,230,.26);--accent:oklch(0.76 0.11 155);--surface:#1c1c1b;color-scheme:dark}
+
+:root{--ease-out:cubic-bezier(.2,.7,.2,1);--ease-in:cubic-bezier(.4,0,1,1)}
+html{background:var(--bg);font-variant-numeric:tabular-nums;scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-family:Geist,system-ui,sans-serif;-webkit-font-smoothing:antialiased;transition:background-color .3s,color .3s}
+main{flex:1}
+a{color:inherit;text-decoration:none;transition:color .2s}
+a:hover{color:var(--accent)}
+::selection{background:var(--accent);color:var(--bg)}
+:focus-visible{outline:1px solid var(--accent);outline-offset:4px;border-radius:2px}
+h1,h2,h3,p{margin:0}
+
+.wrap{box-sizing:border-box;width:100%;max-width:1216px;margin:0 auto;padding:0 48px}
+.lbl{font:400 11px "Geist Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.skip{position:absolute;left:-9999px;top:12px;z-index:20;padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:4px}
+.skip:focus{left:16px}
+.ul{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;text-decoration-color:var(--line2);transition:color .2s,text-decoration-color .2s}
+.ul:hover{color:var(--accent);text-decoration-color:var(--accent)}
+.arrow{display:inline-block;transition:transform .25s var(--ease-out)}
+a:hover .arrow{transform:translateX(3px)}
+
+/* header */
+header{position:sticky;top:0;z-index:10;background:color-mix(in oklab,var(--bg) 82%,transparent);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line);view-transition-name:site-header}
+.bar{height:60px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:14px;font-weight:500;letter-spacing:-0.01em}
+.brand:hover{color:inherit}
+nav{display:flex;align-items:center;gap:32px;font-size:14px}
+nav a{color:var(--muted);text-decoration:underline;text-underline-offset:7px;text-decoration-thickness:1px;text-decoration-color:transparent;transition:color .2s,text-decoration-color .2s}
+nav a:hover,nav a[aria-current]{color:var(--ink);text-decoration-color:var(--accent)}
+.theme{font:500 11px "Geist Mono",monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .2s,border-color .2s}
+.theme:hover{color:var(--ink);border-color:var(--line2)}
+.theme i{width:8px;height:8px;border-radius:50%;border:1px solid currentColor;box-sizing:border-box;background:currentColor}
+[data-theme="dark"] .theme i{background:transparent}
+
+/* shared blocks */
+.page{padding:112px 0 120px}
+.ttl{font-size:44px;line-height:1.05;font-weight:500;letter-spacing:-0.03em;text-wrap:balance}
+.sec{padding-top:96px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.sec-head a{font-size:14px;color:var(--muted)}
+.sec-head a:hover{color:var(--ink)}
+.list{margin-top:48px;border-top:1px solid var(--line)}
+.row{display:grid;gap:32px;align-items:baseline;padding:22px 0;border-bottom:1px solid var(--line)}
+.row[hidden]{display:none}
+.name{font-size:17px;font-weight:500;justify-self:start}
+.sub{font-size:15px;line-height:1.55;color:var(--muted);text-wrap:pretty}
+.yr{font:400 12px "Geist Mono",monospace;color:var(--muted)}
+.links{display:flex;gap:18px;justify-content:flex-end;font:400 12px "Geist Mono",monospace;color:var(--muted);white-space:nowrap}
+
+/* home */
+/* One screen: who I am, then a single way forward. */
+.home{min-height:calc(100svh - 61px);box-sizing:border-box;padding:120px 0 56px;display:flex;flex-direction:column;justify-content:space-between;gap:72px}
+.kicker{margin-bottom:28px}
+.hero{margin-left:-0.06em;font-size:clamp(64px,10.4vw,150px);line-height:.92;font-weight:300;letter-spacing:-0.055em;white-space:nowrap;cursor:default;user-select:none;-webkit-user-select:none}
+/* Each letter reserves the width of its boldest weight, so the weight wave never reflows the name. */
+.hero .l{display:inline-grid;justify-items:center;font-weight:300;transition:font-weight .35s var(--ease-out)}
+.hero .l>span,.hero .l::after{grid-area:1/1}
+.hero .l::after{content:attr(data-c);font-weight:560;visibility:hidden}
+.hero.rippling .l{transition:none}
+.intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:end}
+.intro p{max-width:500px;font-size:19px;line-height:1.6;letter-spacing:-0.01em;text-wrap:pretty}
+.now{display:flex;gap:48px;font-size:14px}
+.now div{display:flex;flex-direction:column;gap:8px}
+.status{display:inline-flex;align-items:center;gap:10px}
+.status i{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+/* The way forward at the end of every page. */
+.onward{display:flex;flex-direction:column;gap:10px;margin-top:96px;padding-top:28px;border-top:1px solid var(--line);font-size:28px;font-weight:500;letter-spacing:-0.02em}
+.home .onward{margin-top:0}
+
+/* projects */
+.filters{margin-top:48px;display:flex;gap:28px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.filters button{background:none;border:0;padding:0;cursor:pointer;font:400 14px Geist,sans-serif;color:var(--muted);display:flex;gap:6px;align-items:baseline;text-decoration:underline;text-underline-offset:7px;text-decoration-thickness:1px;text-decoration-color:transparent;transition:color .2s,text-decoration-color .2s}
+.filters button:hover{color:var(--ink)}
+.filters button[aria-pressed="true"]{color:var(--ink);text-decoration-color:var(--accent)}
+.filters small{font:400 11px "Geist Mono",monospace;color:var(--muted)}
+.proj{grid-template-columns:240px minmax(0,1fr) 64px 220px}
+
+/* experience */
+.exp{grid-template-columns:160px minmax(0,1fr);padding:28px 0}
+.exp h2{font-size:17px;font-weight:500}
+.exp .co{margin-top:4px;font-size:15px;color:var(--muted)}
+.exp p{margin-top:12px;max-width:640px;font-size:15px;line-height:1.6;text-wrap:pretty}
+.cert{grid-template-columns:minmax(0,1fr) 260px 96px 64px}
+.cert a{font:400 12px "Geist Mono",monospace;color:var(--muted);text-align:right}
+
+/* case study */
+.back{display:inline-flex;gap:6px;font-size:14px;color:var(--muted)}
+.back:hover{color:var(--ink)}
+.back .arrow{transition:transform .25s var(--ease-out)}
+.back:hover .arrow{transform:translateX(-3px)}
+.cs-head{margin:40px 0 64px}
+.cs-head .ttl{margin:16px 0 24px;font-size:56px;width:fit-content;max-width:100%}
+.lead{max-width:640px;font-size:19px;line-height:1.6;letter-spacing:-0.01em;color:var(--muted);text-wrap:pretty}
+.facts{margin:0 0 96px;border-top:1px solid var(--line)}
+.facts div{display:grid;grid-template-columns:240px minmax(0,1fr);gap:32px;padding:16px 0;border-bottom:1px solid var(--line);font-size:15px}
+.facts dt{font:400 11px "Geist Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.facts dd{margin:0}
+.story>section{display:grid;grid-template-columns:240px minmax(0,640px);gap:32px;margin-bottom:64px}
+.story h2{margin-top:6px}
+.story p{margin-bottom:1em;font-size:17px;line-height:1.7;text-wrap:pretty}
+.story p:last-child{margin-bottom:0}
+figure{margin:0 0 64px}
+figure img{display:block;max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+figcaption{margin-top:12px;max-width:640px;font-size:14px;line-height:1.5;color:var(--muted)}
+.repo{margin-top:20px;font-size:15px}
+
+/* contact */
+.contact .lead{margin:24px 0 64px}
+.ct a{display:grid;grid-template-columns:180px minmax(0,1fr) auto;gap:32px;align-items:baseline;padding:22px 0;border-top:1px solid var(--line)}
+.ct a span:nth-child(2){font-size:24px;letter-spacing:-0.02em}
+.ct a span:last-child{color:var(--muted)}
+.legal{padding-top:40px;padding-bottom:48px;font:400 11px "Geist Mono",monospace;letter-spacing:.04em;color:var(--muted)}
+
+/* motion
+   Page changes are cross-document view transitions: the old page fades out quickly, the new one
+   fades in with a small rise, the header stays put, and a project title glides between the list
+   and its case study (matching view-transition-name). Browsers without support just navigate. */
+@view-transition{navigation:auto}
+::view-transition-group(*){animation-duration:.34s;animation-timing-function:var(--ease-out)}
+/* A title moving between the list and its case study: snapshots keep their natural size (no stretched text),
+   and the old one is gone before the new one fades in, so two different line breaks never show through each other. */
+::view-transition-old(*),::view-transition-new(*){width:auto;height:auto}
+::view-transition-old(*){animation:.12s var(--ease-in) both vt-out}
+::view-transition-new(*){animation:.22s .12s var(--ease-out) both vt-fade}
+/* A title with no partner on the other page moves with its page, not on its own. */
+::view-transition-old(*):only-child{animation:.14s var(--ease-in) both vt-out}
+::view-transition-new(*):only-child{animation:.3s .04s var(--ease-out) both vt-in}
+::view-transition-old(root){animation:.14s var(--ease-in) both vt-out}
+::view-transition-new(root){animation:.3s .04s var(--ease-out) both vt-in}
+::view-transition-group(site-header),::view-transition-new(site-header){animation:none}
+::view-transition-old(site-header){display:none}
+/* Filtering the project list: one quiet crossfade; rows don't fly apart from their titles. */
+html.vt-soft .proj .name{view-transition-name:none!important}
+html.vt-soft::view-transition-old(root){animation:.12s linear both vt-out}
+html.vt-soft::view-transition-new(root){animation:.18s linear both vt-fade}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0;transform:translateY(8px)}}
+@keyframes vt-fade{from{opacity:0}}
+
+/* First visit of a session only (see the head script): the name rises in, then the rest fades in. */
+@keyframes rise{from{opacity:0;transform:translateY(.14em)}}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}}
+.intro-on .hero .l>span{display:block;animation:rise .7s var(--ease-out) both;animation-delay:calc(80ms + var(--i) * 32ms)}
+.intro-on .kicker,.intro-on .intro,.intro-on .home .onward{animation:fade .6s .5s var(--ease-out) both}
+
+@media (max-width:760px){
+  .wrap{padding:0 20px}
+  .bar{position:relative;height:auto;flex-wrap:wrap;row-gap:12px;padding-top:16px;padding-bottom:12px}
+  nav{width:100%;gap:24px;font-size:13px}
+  .theme{position:absolute;top:11px;right:20px}
+  .page{padding:56px 0 72px}
+  .home{min-height:calc(100svh - 76px);padding-top:64px;gap:56px}
+  .hero{font-size:15.5vw}
+  .intro{grid-template-columns:minmax(0,1fr);gap:32px;margin-top:48px}
+  .intro p{font-size:17px}
+  .now{order:2;gap:32px}
+  .sec{padding-top:72px}
+  .ttl{font-size:34px}
+  .cs-head .ttl{font-size:36px}
+  .row,.proj,.exp,.cert{grid-template-columns:minmax(0,1fr);gap:8px}
+  .links{justify-content:flex-start}
+  .cert a{text-align:left}
+  .filters{flex-wrap:wrap;gap:12px 20px}
+  .facts{margin-bottom:56px}
+  .facts div,.story>section{grid-template-columns:minmax(0,1fr);gap:8px}
+  .story>section{margin-bottom:40px}
+  .onward{margin-top:64px;font-size:22px}
+  .ct a{grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;padding:18px 0}
+  .ct a span:first-child{grid-column:1/-1}
+  .ct a span:nth-child(2){font-size:20px;overflow-wrap:anywhere}
+}
+
+@media (prefers-reduced-motion:reduce){
+  @view-transition{navigation:none}
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}

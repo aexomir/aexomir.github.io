@@ -34,6 +34,36 @@
           "label": "Status",
           "value": "TestFlight"
         }
+      ],
+      "caseStudy": {
+        "role": "Solo project: product, iOS app, macOS helper and release tooling",
+        "problem": "Manual time trackers depend on me remembering to press start, and I don't. I get pulled into something, work for two hours, and the timer was never running. Automatic trackers fix that by watching window titles, which means document names, the sites I visit and the names of private repos, and the commercial ones sync that to a server.\n\nI wanted automatic tracking where none of that leaves hardware I own: no account, no backend, no analytics.",
+        "approach": "Chrona is two apps. The iPhone app (Expo, React Native, TypeScript) holds sessions, projects and rules. A Swift menu bar helper on the Mac watches the frontmost app and the focused window title, streams every change to the phone over the local network, and appends it to a seven-day activity ledger on disk. The phone finds the Mac over Bonjour (_chrona._tcp) through a local Expo module I wrote around Network.framework, and the helper sends nothing until the phone presents a six-character pairing code, compared in constant time.\n\nAuto-tracking runs on rules I write: an app name plus optional window-title keywords, mapped to a project. When a rule matches, a timer starts. When I switch away for more than 15 seconds, it stops, and two minutes without input on the Mac puts the session on hold. When I stop a timer, the phone asks the Mac's ledger what happened in that window and shows a per-app breakdown, which I can trim before saving.",
+        "decisions": "Local-first over sync. Sessions, projects and rules live in MMKV encrypted with AES-256, with the key in the iOS Keychain. The phone and the Mac talk directly and nothing else. The cost is real: two phones mean two separate sets of data.\n\nTwo channels on one connection. The live stream drives the UI and is lossy by design. Per-app durations come from a request-response query against the Mac's ledger instead, so they stay correct when the phone was in my pocket or the Mac was asleep. If the Mac is unreachable when I save, the query is queued and retried for up to seven days.\n\nShow what the app doesn't know. Every ledger answer includes coverage (observed, idle, locked, asleep, offline, unknown) that sums to the window length, so the app never implies it saw the whole session when it didn't.\n\nAn unsandboxed helper. Reading another app's window title needs the Accessibility API, which doesn't work inside the App Sandbox. That's a broad permission to ask for, and it's why the pairing gate matters: without it, any device on the network could read my window titles.\n\nPredictable rules, no model. The matcher is a pure function: exact app name, every keyword present in the title, more keywords win. An app I use for ten minutes with no rule shows a quiet hint instead of being tracked behind my back. Search is keyword matching over my own sessions too: synchronous, local, no network call.",
+        "results": "Version 1.1.0 shipped the Mac helper, pairing, wire protocol v2 with the usage query, per-app breakdowns, the backfill queue, auto-tracking rules, calendar mapping, home screen widgets and a Live Activity. Jest suites cover the stats, timer, auto-track matcher and calendar logic, Maestro flows cover starting and stopping a session and the Mac helper status, and CI runs typecheck, lint and tests on every pull request.",
+        "retrospective": "Sign and notarize the Mac helper from the start. Right now it's unsigned, so anyone else has to get past Gatekeeper before they can try the best part of the app.\n\nTest Android early or drop it explicitly. The code paths exist but nothing on Android has been exercised, which is worse than a clear \"iOS only\"."
+      },
+      "images": [
+        {
+          "src": "assets/projects/chrona/hero.webp",
+          "alt": "Chrona on iPhone: dashboard, timeline and stats screens side by side.",
+          "caption": "Chrona on iPhone."
+        },
+        {
+          "src": "assets/projects/chrona/session-detail.webp",
+          "alt": "Session detail screen showing which apps a session's time actually went to.",
+          "caption": "Per-app breakdown of a session, answered by the Mac helper's activity ledger."
+        },
+        {
+          "src": "assets/projects/chrona/timeline.webp",
+          "alt": "Timeline screen showing the day in order, with calendar events alongside sessions.",
+          "caption": "Timeline, with calendar events alongside sessions."
+        },
+        {
+          "src": "assets/projects/chrona/stats.webp",
+          "alt": "Stats screen with trends, peak hours, project split and streak.",
+          "caption": "Stats: trends, peak hours, project split and streak."
+        }
       ]
     },
     {
@@ -60,6 +90,21 @@
           "label": "Baseline",
           "value": "53.6% frozen"
         }
+      ],
+      "caseStudy": {
+        "role": "Course project, MSc AI at Politecnico di Torino · team of three",
+        "problem": "Semantic correspondence means finding the same point on two different objects, like the left eye of one cat on another cat. We wanted to know how much of that pretrained vision backbones already encode, and how much a light fine-tune adds on top. We compared DINOv2 ViT-L/14, DINOv3 ViT-B/16 and the SAM ViT-B image encoder on SPair-71k: 12,234 test pairs and 88,328 keypoints.",
+        "approach": "The matcher is deliberately simple. Extract a dense patch feature map from each image, L2-normalize it, read the descriptor at the source keypoint, and pick the most similar target patch by cosine similarity. Scoring is PCK: a prediction counts if it lands within 0.05, 0.1, 0.15 or 0.2 of the target's bounding-box size.\n\nThe pipeline runs in four stages: frozen baselines; fine-tuning the last 1, 2 or 4 transformer blocks with an InfoNCE correspondence loss; a window soft-argmax decoder tuned on validation; and zero-shot transfer to PF-Pascal and PF-Willow. It's one Colab notebook, with features cached as float16 and checkpoints on Google Drive so runs resume across sessions.",
+        "decisions": "Change one thing at a time. The matcher stays fixed; only the backbone weights (stage 2) and the decoder (stage 3) change, so each gain can be attributed to one of them.\n\nTrain little. Only the last N blocks are unfrozen, trained with AdamW at a learning rate of 5e-6 for 3 epochs, batch size 1 with gradient accumulation of 4, and mixed precision. That's 9 runs: three backbones times three values of N.\n\nKeep the test split clean. Checkpoints are chosen by validation PCK@0.1, and the soft-argmax sweep (temperatures 0.001 to 0.05, windows 3 to 11) also runs on validation. The test split is only evaluated after training.\n\nGet below the patch grid. Argmax snaps to a 14- or 16-pixel patch. Window soft-argmax takes a temperature-weighted average in a small window around the peak, which gives sub-patch precision without touching the weights.",
+        "results": "Frozen, DINOv2 led with 55.5% PCK@0.1, DINOv3 scored 53.6% and SAM 24.4%. Fine-tuning lifted them to 72.9% (DINOv2, last 4 blocks), 74.5% (DINOv3, last 2) and 44.1% (SAM, last 2). More unfrozen blocks wasn't always better: DINOv3 fell to 66.4% with 4. Soft-argmax added another 0.6 to 1.9 points, taking DINOv3 to 76.4%, DINOv2 to 73.5% and SAM to 46.0%.\n\nOn PF-Willow, SPair fine-tuning helped all three backbones; DINOv3 went from 85.7% frozen to 89.2%. On PF-Pascal it helped DINOv2 (80.7% to 84.3%) and SAM (38.9% to 49.8%), but frozen DINOv3 was already at 86.5% and the fine-tuned version didn't beat it (86.0%). Both PF benchmarks normalize by image size rather than bounding box, so their numbers aren't directly comparable to SPair's.",
+        "retrospective": "Commit figures and qualitative match examples alongside the CSVs. The results only exist as tables today, so the work is hard to judge without re-running a GPU notebook.\n\nInvestigate surprises instead of just reporting them. DINOv3 dropping from 74.5% to 66.4% when unfreezing 4 blocks instead of 2 is the most interesting result here, and it deserved a proper look at learning rate and overfitting."
+      },
+      "images": [
+        {
+          "src": "assets/projects/semantic-correspondence/pck-by-backbone.svg",
+          "alt": "Grouped bar chart of PCK@0.1 on SPair-71k. DINOv3 ViT-B/16: 53.6 frozen, 74.5 fine-tuned, 76.4 with soft-argmax. DINOv2 ViT-L/14: 55.5, 72.9, 73.5. SAM ViT-B: 24.4, 44.1, 46.0.",
+          "caption": "Fine-tuning the last blocks adds about 20 points of PCK@0.1 for every backbone; soft-argmax adds up to 2 more, putting DINOv3 on top at 76.4."
+        }
       ]
     },
     {
@@ -85,6 +130,21 @@
         {
           "label": "Result",
           "value": "ROC-AUC 0.949 on Cleveland"
+        }
+      ],
+      "caseStudy": {
+        "role": "Course project, MSc AI at Politecnico di Torino · team of two",
+        "problem": "The UCI Heart Disease data comes from separate hospital cohorts. We trained on Cleveland and asked a harder question than held-out accuracy: how does the model hold up on patients from Hungary and Switzerland that it never saw in development, and how far can its probabilities be trusted? It's a research project, not a clinical tool.",
+        "approach": "We turned the label into any disease versus none and split Cleveland 70/15/15 with stratification: 212 train, 45 validation and 46 test rows. Hungarian (294 rows) and Swiss (123 rows) were held out as external test sets.\n\nThree models share one preprocessing pipeline: logistic regression, XGBoost tuned with 50 Optuna trials, and a small MLP. A feature-engineering step expands the 13 raw predictors to 19 with interaction terms, then median imputation and scaling. Tuning and 5-fold cross-validation used Cleveland train only, the final models were fit on train plus validation, and the three test sets stayed untouched until final evaluation. Beyond ROC-AUC we reported average precision, F1, sensitivity and specificity, ran DeLong tests between the top two models on each split, tried Platt and isotonic calibration, ran a CORAL domain-adaptation ablation, and used SHAP to explain XGBoost.",
+        "decisions": "Measure the shift before modelling. Chi-square tests for categorical features and Kolmogorov-Smirnov tests for continuous ones showed what we were up against. Hungarian is missing ca in 291 of 294 rows and thal in 266. Switzerland is 93.5% positive, with only 8 negatives in 123 rows.\n\nSelect on validation, not test. Cleveland validation ROC-AUC picked logistic regression as the best model. Threshold metrics use a fixed 0.5 cutoff rather than a clinically chosen operating point, and we list that as a limitation.\n\nDon't over-read small numbers. With a 46-row test set and 8 Swiss negatives, we ran DeLong tests before calling any model better, and we read Switzerland's high average precision against its 93.5% base rate.\n\nKeep adaptation honest. CORAL was evaluated only as an ablation and never used to select or train the models.",
+        "results": "On the held-out Cleveland test, logistic regression reached ROC-AUC 0.949, against 0.935 for both XGBoost and the MLP. On the external sites XGBoost was best, at 0.876 on Hungarian and 0.720 on Switzerland. The only significant DeLong difference was XGBoost over logistic regression on Switzerland (0.065, p = 0.031), and with 8 negatives that is weak evidence.\n\nCalibration helped in places: isotonic calibration cut logistic regression's expected calibration error on the Cleveland test from 0.106 to 0.072. It stayed poor on Switzerland, where XGBoost only improved from 0.452 to 0.394. CORAL didn't help: for XGBoost on Switzerland it lowered ROC-AUC from 0.720 to 0.628 and sensitivity from 0.470 to 0.261. SHAP ranked ca, the engineered cp × thal interaction and cp as the top three features.\n\nThe takeaway: strong internal discrimination did not carry over evenly to other sites.",
+        "retrospective": "Make the evaluation reproducible end to end. The final notebook imports a module that is no longer in the repo, and two committed figures drifted from the final result tables. Every table and figure should come from one script, in one run.\n\nPick a clinical operating point. A fixed 0.5 threshold is easy to compare but says little about how the model would actually be used."
+      },
+      "images": [
+        {
+          "src": "assets/projects/heart-disease/shap-summary.png",
+          "alt": "SHAP beeswarm summary for the XGBoost model. The top-ranked features are ca, cp_x_thal, cp, age_x_oldpeak, thal and sex; high values of ca and cp_x_thal push predictions toward disease.",
+          "caption": "SHAP summary for XGBoost: vessel count (ca) and the engineered chest-pain × thalassemia interaction drive predictions most."
         }
       ]
     },
@@ -189,7 +249,8 @@
     {
       "years": "2025 — Now",
       "role": "Machine Learning Engineer (Part-Time)",
-      "company": "BitPolito"
+      "company": "BitPolito",
+      "impact": "Built a RAG pipeline over internal documents, with embedding-based vector search feeding an LLM, to power an internal chatbot and cut response latency by about 30%."
     },
     {
       "years": "2023 — 2024",
@@ -199,7 +260,8 @@
     {
       "years": "2022 — 2025",
       "role": "Senior Software Engineer",
-      "company": "Digikala"
+      "company": "Digikala",
+      "impact": "Iran's largest e-commerce platform, 40M active users. Built a reusable service architecture adopted by 3 product teams and 15+ engineers, and profiled and fixed recurring memory leaks and rendering issues, cutting CPU usage by 30%."
     },
     {
       "years": "2022",

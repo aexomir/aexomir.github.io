@@ -30,11 +30,17 @@ The two app buttons need a one-time setup (Expo project, `EXPO_TOKEN` secret and
 
 ## How it builds
 
-- `template.html` is the page. `{{profile.name}}`-style placeholders and `<!-- @projects -->`-style block markers are filled from `content.json`.
-- `scripts/build.mjs` validates the content, HTML-escapes it and writes `_site/` (no dependencies).
+- `layout.html` is the page shell (head, header, footer). `scripts/build.mjs` validates `content.json`, HTML-escapes it and renders every page into it: home, `/projects/`, one `/projects/<slug>/` per project with a case study, `/experience/`, `/contact/` and `404.html`. No dependencies.
+- The pages read as a journey: each one ends with a single "Next" link (home → projects → case studies in list order → experience → contact).
+- `site.css` and `site.js` are shared by every page. Geist is self-hosted in `fonts/` (SIL Open Font License, `fonts/OFL.txt`).
+- Page changes use cross-document view transitions: a quick crossfade, the header stays still, and a project's title glides between the list and its case study. Browsers without support navigate normally, and reduced-motion settings turn all of it off.
+- Images get `width`/`height` from the files at build time, so nothing shifts while they load.
 - `.github/workflows/pages.yml` runs the tests and the build on every push, and deploys `main`.
 
 ```bash
 node --test scripts/build.test.mjs
-node scripts/build.mjs   # then open _site/index.html
+node scripts/build.mjs
+python3 -m http.server 4173 -d _site   # then open http://localhost:4173
 ```
+
+The pages use root paths (`/site.css`), so open them through a server, not as files.

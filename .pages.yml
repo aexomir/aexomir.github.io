@@ -33,9 +33,9 @@ content:
           - { name: name, label: Name, type: string, required: true }
           - { name: title, label: Title, type: string, required: true, description: "Small line above the name, also used in the page title." }
           - { name: description, label: Search and share description, type: text, required: true, description: "Shown by Google and in link previews." }
-          - { name: intro, label: Intro, type: text, required: true, description: "The paragraph under the name. \"See my projects.\" is added after it." }
+          - { name: intro, label: Intro, type: text, required: true, description: "The paragraph under the name on the home page." }
           - { name: currently, label: Currently, type: string, required: true }
-          - { name: city, label: City, type: string, required: true, description: "Label for the live clock." }
+          - { name: city, label: City, type: string, required: true, description: "Used by the iPhone app's live clock." }
           - { name: timeZone, label: Time zone, type: string, required: true, description: "IANA name, for example Europe/Rome." }
           - { name: status, label: Status, type: string, required: true, description: "Next to the green dot, for example \"Open to new roles\"." }
 
@@ -67,7 +67,7 @@ content:
             type: string
             pattern: { regex: "^(https://\\S+)?$", message: "Leave empty or use a full https:// link." }
           - name: facts
-            label: Facts (app detail screen)
+            label: Facts (app detail screen and case-study page)
             type: object
             list:
               collapsible:
@@ -76,6 +76,33 @@ content:
             fields:
               - { name: label, label: Label, type: string, required: true }
               - { name: value, label: Value, type: string, required: true }
+          - name: caseStudy
+            label: Case study
+            type: object
+            description: "Fill Problem, Approach, Key decisions and Results to publish a page at aexomir.me/projects/<slug>/, linked from the project list. Case studies read in list order, each pointing to the next. Leave them empty for no page. A blank line starts a new paragraph."
+            fields:
+              - { name: role, label: Role, type: string, description: "Optional. Your part and the team, for example \"Solo project\" or \"Course project · team of three\"." }
+              - { name: problem, label: Problem, type: text }
+              - { name: approach, label: Approach, type: text }
+              - { name: decisions, label: Key decisions, type: text }
+              - { name: results, label: Results, type: text, description: "Real numbers only." }
+              - { name: retrospective, label: "What I'd do differently", type: text, description: "Optional." }
+          - name: images
+            label: Images (case-study page)
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{src}"
+            fields:
+              - name: src
+                label: File path
+                type: string
+                required: true
+                pattern: { regex: "^assets/(?:[\\w-][\\w.-]*/)*[\\w-][\\w.-]*\\.(png|webp|svg)$", message: "A .png, .webp or .svg under assets/, for example assets/projects/chrona/timeline.png" }
+                description: "The file must be committed to the repo at this path."
+              - { name: alt, label: Alt text, type: string, required: true, description: "What the image shows, for people using screen readers." }
+              - { name: caption, label: Caption, type: string }
 
       - name: experience
         label: Experience
@@ -88,6 +115,7 @@ content:
           - { name: years, label: Years, type: string, required: true, description: "For example 2022 — 2025 or 2025 — Now." }
           - { name: role, label: Role, type: string, required: true }
           - { name: company, label: Company, type: string, required: true }
+          - { name: impact, label: Impact, type: text, description: "Optional. One or two sentences on what you changed, with numbers." }
 
       - name: certificates
         label: Certificates

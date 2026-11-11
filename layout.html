@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{page.title}}</title>
+<meta name="description" content="{{page.description}}">
+<link rel="canonical" href="https://aexomir.me{{page.path}}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://aexomir.me{{page.path}}">
+<meta property="og:title" content="{{page.title}}">
+<meta property="og:description" content="{{page.description}}">
+<meta property="og:image" content="https://aexomir.me/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#f6f5f2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131312" media="(prefers-color-scheme: dark)">
+<script>
+(function () {
+  var root = document.documentElement;
+  // Old single-page links (/#/projects, /#/projects/<slug> …) moved to real pages.
+  var studies = '{{site.studies}}'.split(' ');
+  var m = location.hash.match(/^#\/(\w+)(?:\/([\w-]+))?/);
+  var moved = m && (m[1] === 'projects' && studies.indexOf(m[2]) > -1 ? '/projects/' + m[2] + '/'
+    : { projects: '/projects/', experience: '/experience/', certificates: '/experience/#certificates', contact: '/contact/' }[m[1]]);
+  if (moved) location.replace(moved);
+  // Theme before first paint: saved choice, else the system setting.
+  var t = null;
+  try { t = localStorage.getItem('theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  root.dataset.theme = t;
+  // The home intro plays once per visit, not every time you come back to it.
+  if (location.pathname === '/') {
+    try { if (!sessionStorage.getItem('intro')) { sessionStorage.setItem('intro', '1'); root.classList.add('intro-on'); } } catch (e) {}
+  }
+})();
+</script>
+<link rel="preload" href="/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/GeistMono-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/site.css">
+<script src="/site.js" defer></script>
+</head>
+<body>
+<a class="skip lbl" href="#main">Skip to content</a>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="/">{{profile.name}}</a>
+    <nav aria-label="Main">
+      <!-- @nav -->
+      <button class="theme" type="button" aria-label="Switch to dark theme"><i></i><span>Dark</span></button>
+    </nav>
+  </div>
+</header>
+<main id="main" class="wrap">
+<!-- @body -->
+</main>
+<footer class="wrap legal">© {{year}} {{profile.name}}</footer>
+</body>
+</html>
